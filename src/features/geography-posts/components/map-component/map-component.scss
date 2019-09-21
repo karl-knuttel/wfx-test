@@ -1,0 +1,10 @@
+.c-map-component {
+    max-width: 980px;
+    margin: 0 auto;
+
+    .rsm-marker {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

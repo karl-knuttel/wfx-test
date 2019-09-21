@@ -6,6 +6,7 @@ import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import createRootReducer, { INITIAL_STATE } from './app.reducers';
 
 /* Epics */
+import GeographyPostsEpics from './features/geography-posts/store/geography-posts.epics';
 
 const history = createBrowserHistory({});
 
@@ -18,7 +19,13 @@ const epicMiddleware = createEpicMiddleware();
 /**
  * Epics (Async handling with redux-observables and RxJS)
  */
-export const ROOT_EPIC = combineEpics();
+export const ROOT_EPIC = combineEpics(
+    GeographyPostsEpics.getGeographyPosts,
+    GeographyPostsEpics.getGeographySinglePost,
+    GeographyPostsEpics.createGeographyPost,
+    GeographyPostsEpics.updateGeographyPost,
+    GeographyPostsEpics.deleteGeographyPost
+);
 
 /**
  * Create the store
