@@ -1,6 +1,5 @@
 # A simple app using the D3-GeoMap library and some API endpoints
 
-## Live version
 Go here to see the live version: https://geo-maps-test.herokuapp.com/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
