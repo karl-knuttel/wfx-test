@@ -29,10 +29,63 @@ export const MapComponent: ExoticComponent<MapComponentProps> = memo(props => {
         context ? context : 'default'
     } ${modifiers ? modifiers : ''}`;
 
+    const include = [
+        'DEU',
+        'FRA',
+        'ESP',
+        'PRT',
+        'ITA',
+        'GRC',
+        'GBR',
+        'IRL',
+        'NLD',
+        'BEL',
+        'PGL',
+        'BGR',
+        'AUT',
+        'ALB',
+        'CHE',
+        'SWE',
+        'SVK',
+        'SVN',
+        'LTU',
+        'GIB',
+        'LIE',
+        'CZE',
+        'ALB',
+        'AND',
+        'ARM',
+        'AZE',
+        'BLR',
+        'HRV',
+        'CYP',
+        'DNK',
+        'EST',
+        'FIN',
+        'GEO',
+        'HUN',
+        'LVA',
+        'LUX',
+        'MLT',
+        'MDA',
+        'MCO',
+        'MNE',
+        'NOR',
+        'POL',
+        'ROU',
+        'SMR',
+        'SRB',
+        'SWE',
+        'UKR',
+        'BIH',
+        'MKD',
+        'UNK'
+    ];
+
     return (
         <div className={MapComponentClasses}>
             <ComposableMap
-                projectionConfig={{ scale: 2000 }}
+                projectionConfig={{ scale: 1400 }}
                 width={980}
                 height={720}
                 style={{
@@ -40,36 +93,39 @@ export const MapComponent: ExoticComponent<MapComponentProps> = memo(props => {
                     height: 'auto'
                 }}
             >
-                <ZoomableGroup center={[8.2, 46.8]} disablePanning>
+                <ZoomableGroup center={[12, 49]} disablePanning>
                     <Geographies geography="/static/world-50m.json">
                         {(geographies, projection) =>
-                            geographies.map((geography, geographyIndex) => (
-                                <Geography
-                                    key={geographyIndex}
-                                    geography={geography}
-                                    projection={projection}
-                                    style={{
-                                        default: {
-                                            fill: '#ECEFF1',
-                                            stroke: '#607D8B',
-                                            strokeWidth: 0.75,
-                                            outline: 'none'
-                                        },
-                                        hover: {
-                                            fill: '#CFD8DC',
-                                            stroke: '#607D8B',
-                                            strokeWidth: 0.75,
-                                            outline: 'none'
-                                        },
-                                        pressed: {
-                                            fill: '#FF5722',
-                                            stroke: '#607D8B',
-                                            strokeWidth: 0.75,
-                                            outline: 'none'
-                                        }
-                                    }}
-                                />
-                            ))
+                            geographies.map(
+                                (geography: any, geographyIndex) =>
+                                    include.indexOf(geography.id) !== -1 && (
+                                        <Geography
+                                            key={geographyIndex}
+                                            geography={geography}
+                                            projection={projection}
+                                            style={{
+                                                default: {
+                                                    fill: '#ECEFF1',
+                                                    stroke: '#607D8B',
+                                                    strokeWidth: 0.75,
+                                                    outline: 'none'
+                                                },
+                                                hover: {
+                                                    fill: '#CFD8DC',
+                                                    stroke: '#607D8B',
+                                                    strokeWidth: 0.75,
+                                                    outline: 'none'
+                                                },
+                                                pressed: {
+                                                    fill: '#FF5722',
+                                                    stroke: '#607D8B',
+                                                    strokeWidth: 0.75,
+                                                    outline: 'none'
+                                                }
+                                            }}
+                                        />
+                                    )
+                            )
                         }
                     </Geographies>
                     <Markers>
