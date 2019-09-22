@@ -1,5 +1,5 @@
 const CORE_INITIAL_STATE: CoreState = {
-    appTitle: 'WeFox Test'
+    appTitle: 'CityMap'
 };
 
 interface CoreState {

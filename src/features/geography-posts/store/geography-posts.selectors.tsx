@@ -61,3 +61,19 @@ export const getCurrentPostFetchStatus = createSelector(
     getCurrentPost,
     currentPost => currentPost.fetchStatus
 );
+
+/*
+ * Single view
+ */
+export const getModalActive = createSelector(
+    getGeographyPosts,
+    geographyPosts => geographyPosts.modalActive
+);
+
+/*
+ * Post id
+ */
+export const getSelectedPostId = createSelector(
+    getGeographyPosts,
+    geographyPosts => geographyPosts.selectedPostId
+);

@@ -52,6 +52,15 @@ export default function geographyPostsReducer(
         case Actions.GEOGRAPHY_POST_DELETE_FAILED:
             return handleGeographyPostDeleteFailed(state, action.payload);
 
+        case Actions.GEOGRAPHY_POST_SET_MODAL_ACTIVE_STATE:
+            return handleGeographyPostsSetModalActiveState(
+                state,
+                action.payload
+            );
+
+        case Actions.GEOGRAPHY_POST_SET_SELECTED_POST_ID:
+            return handleGeographyPostsSetSelectedPostId(state, action.payload);
+
         default:
             return state;
     }
@@ -227,5 +236,19 @@ function handleGeographyPostDeleteFailed(state: any, payload: any) {
             error: payload,
             fetchStatus: FETCH_STATUS.DELETE_FAILED
         }
+    };
+}
+
+function handleGeographyPostsSetModalActiveState(state: any, payload: any) {
+    return {
+        ...state,
+        modalActive: payload
+    };
+}
+
+function handleGeographyPostsSetSelectedPostId(state: any, payload: any) {
+    return {
+        ...state,
+        selectedPostId: payload
     };
 }

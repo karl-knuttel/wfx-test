@@ -1,0 +1,29 @@
+@import '../../../../shared/styles/shared';
+
+.c-city-adder {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid $color--dark-blue;
+    padding: 2rem;
+    background: $color--light-gray;
+
+    .city-adder__title {
+        color: $color--dark-blue;
+        margin-bottom: 2rem;
+    }
+
+    .city-adder__tag {
+        padding: 0.5rem 0.75rem;
+        background: $color--orange;
+        border-radius: 5px;
+        color: $color--white;
+        margin-right: 1rem;
+        font-size: 14px;
+        font-weight: 300;
+        margin-bottom: 1rem;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

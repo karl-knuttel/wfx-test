@@ -10,12 +10,16 @@ const GEOGRAPHY_POSTS_INITIAL_STATE: GeographyPostsState = {
         entity: {},
         error: {},
         fetchStatus: FETCH_STATUS.NONE
-    }
+    },
+    modalActive: false,
+    selectedPostId: ''
 };
 
 interface GeographyPostsState {
     posts: Posts;
     currentPost: CurrentPost;
+    modalActive: boolean;
+    selectedPostId: string;
 }
 
 interface Posts extends ServerResponse {

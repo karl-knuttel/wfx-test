@@ -13,7 +13,6 @@ interface HomepageProps {
 
 export const Homepage: ExoticComponent<HomepageProps> = memo(props => (
     <div className="p-home">
-        Home page route!
         <PostsContainer />
     </div>
 ));

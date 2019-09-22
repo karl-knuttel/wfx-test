@@ -9,26 +9,29 @@ import * as fromActions from '../../store/geography-posts.actions';
 import * as fromData from '../../store/geography-posts.selectors';
 
 /* Components */
+import CityAdder from '../../components/city-adder/city-adder';
+import LocationsTable from '../../components/locations-table/locations-table';
 import MapComponent from '../../components/map-component/map-component';
 import SinglePostComponent, {
     SinglePostEntity
 } from '../../components/single-post/single-post';
 
-/* Styles */
-import './posts-container.scss';
-
 /* Constants */
 import { FETCH_STATUS } from '../../../../shared/scripts/constants';
+
+/* Utilities */
+import { defaultCities } from '../../../../shared/scripts/cities';
+
+/* Styles */
+import './posts-container.scss';
 
 /**
  * Interface
  */
 interface StateProps {
     readonly entities?: SinglePostEntity[];
-    readonly currentPostEntity?: SinglePostEntity;
     readonly fetchStatus?: string;
-    readonly match?: any;
-    readonly userToken?: string;
+    readonly modalActive?: boolean;
 }
 
 type Props = StateProps;
@@ -37,90 +40,16 @@ function mapStateToProps(state: any): StateProps {
     return {
         entities: fromData.getPostsEntities(state),
         fetchStatus: fromData.getPostsFetchStatus(state),
-        currentPostEntity: fromData.getCurrentPostEntity(state)
+        modalActive: fromData.getModalActive(state)
     };
 }
 
 @(connect<StateProps, {}, {}>(mapStateToProps) as any)
 class PostsContainer extends Component<Props> {
-    /**
-     * State
-     */
-    public state = {
-        singlePostView: false
-    };
-
-    /**
-     * Posts Request
-     */
-    private postsRequestPrivate: any;
-
-    get postsRequest(): {} {
-        return this.postsRequestPrivate;
-    }
-
-    set postsRequest(value) {
-        this.postsRequestPrivate = value;
-    }
-
-    /**
-     * Single Post Request
-     */
-    private singlePostRequestPrivate: any;
-
-    get singlePostRequest(): string {
-        return this.singlePostRequestPrivate;
-    }
-
-    set singlePostRequest(value) {
-        this.singlePostRequestPrivate = value;
-    }
-
-    // /**
-    //  * Post Create
-    //  */
-    // private postCreatePrivate: {};
-
-    // get postCreate(): {} {
-    //     return this.postCreatePrivate;
-    // }
-
-    // set postCreate(value) {
-    //     this.postCreatePrivate = value;
-    // }
-
-    // /**
-    //  * Post Update
-    //  */
-    // private postUpdatePrivate: {};
-
-    // get postUpdate(): {} {
-    //     return this.postUpdatePrivate;
-    // }
-
-    // set postUpdate(value) {
-    //     this.postUpdatePrivate = value;
-    // }
-
-    // /**
-    //  * Post Delete
-    //  */
-    // private postDeletePrivate: {};
-
-    // get postDelete(): {} {
-    //     return this.postDeletePrivate;
-    // }
-
-    // set postDelete(value) {
-    //     this.postDeletePrivate = value;
-    // }
-
     /*
      * Component Did Mount
      */
     public componentDidMount() {
-        const { match } = this.props;
-
         this.onGetPostsData();
     }
 
@@ -128,72 +57,65 @@ class PostsContainer extends Component<Props> {
      * Component Did Update
      */
     public componentDidUpdate(prevProps: any, prevState: any) {
-        // const {
-        // 	entities,
-        // 	fetchStatus,
-        // 	isLoadingUser,
-        // 	match,
-        // 	userToken = ''
-        // } = this.props;
-        // if (
-        // 	isLoadingUser !== prevProps.isLoadingUser ||
-        // 	match.params.caseId !== prevProps.match.params.caseId ||
-        // 	!entities.length ||
-        // 	fetchStatus === FETCH_STATUS.DELETED ||
-        // 	fetchStatus === FETCH_STATUS.CREATED
-        // ) {
-        // 	this.onGetData(userToken, match.params.caseId);
-        // }
-        // if (
-        // 	prevProps.fetchStatus !== fetchStatus &&
-        // 	(fetchStatus === FETCH_STATUS.CREATED ||
-        // 		fetchStatus === FETCH_STATUS.WAIVED)
-        // ) {
-        // 	this.setState({
-        // 		isModalOpen: false
-        // 	});
-        // }
+        const { entities, fetchStatus } = this.props;
+        if (
+            fetchStatus !== prevProps.fetchStatus &&
+            (fetchStatus === FETCH_STATUS.CREATED ||
+                fetchStatus === FETCH_STATUS.DELETED ||
+                fetchStatus === FETCH_STATUS.UPDATED)
+        ) {
+            this.onGetPostsData();
+        }
     }
 
     /*
      * Render method
      */
     public render() {
-        const { entities, currentPostEntity } = this.props;
-        const { singlePostView } = this.state;
+        const { entities, modalActive } = this.props;
 
         if (entities && !entities.length) {
             return <div>loading</div>;
         }
 
-        console.log('entities: ', entities);
+        // console.log('entities: ', entities);
 
         return (
             <div className="c-posts-container">
-                {singlePostView ? (
-                    <SinglePostComponent
-                        entity={currentPostEntity}
-                        exitView={() =>
-                            this.setState({
-                                singlePostView: false
-                            })
-                        }
+                <div className="posts-container__left-content">
+                    <LocationsTable
+                        entities={entities && entities}
+                        deleteButtonClick={this.onDeletePost}
                     />
-                ) : (
+                    <div className="posts-container__introduction">
+                        <h5>
+                            Click on a city in the map for further information
+                        </h5>
+                    </div>
+                    <CityAdder
+                        cityEntities={
+                            entities &&
+                            !!entities.length &&
+                            this.onGenerateCityData(entities, defaultCities)
+                        }
+                        onTagClick={this.onAddCity}
+                    />
+                </div>
+                <div className="posts-container__right-content">
                     <MapComponent
-                        mapData={this.onGenerateMapData(entities)}
+                        mapData={entities && this.onGenerateMapData(entities)}
                         onMarkerClick={this.onMarkerClick}
                     />
+                </div>
+                {modalActive && (
+                    <div className="posts-container__pop-up">
+                        <div
+                            className="posts-container__pop-up-bg"
+                            onClick={debounce(() => this.onCloseModal(), 50)}
+                        />
+                        <SinglePostComponent />
+                    </div>
                 )}
-                <button onClick={debounce(() => this.onCreatePost(), 50)}>
-                    Create
-                </button>
-                <button onClick={debounce(() => this.onUpdatePost('1'), 50)}>
-                    Update
-                </button>
-                <button onClick={debounce(() => this.onDeletePost('1'), 50)}>
-                    Delete
-                </button>
             </div>
         );
     }
@@ -202,8 +124,6 @@ class PostsContainer extends Component<Props> {
      * Request the data from the API
      */
     private onGetPostsData = () => {
-        this.postsRequest = {};
-
         store.dispatch(fromActions.geographyPostsFetch({}));
     };
 
@@ -228,68 +148,41 @@ class PostsContainer extends Component<Props> {
     };
 
     /*
-     * Handle when user clicks on map marker
+     * Create data for city adder component
      */
-    private onMarkerClick = (id: string) => {
-        console.log('Map item clicked: ', id);
-        this.setState(
-            {
-                singlePostView: true
-            },
-            () => this.onGetSinglePost(id)
+    private onGenerateCityData = (entities: any, defaultCities: any) => {
+        const toRemove = [] as any[];
+
+        defaultCities.map((city: any) => {
+            entities.forEach((entity: any) => {
+                if (entity.title === city.title) {
+                    toRemove.push(city);
+                }
+            });
+        });
+
+        const filteredCities = defaultCities.filter(
+            (city: any) => toRemove.indexOf(city) === -1
         );
+
+        return filteredCities;
     };
 
     /*
-     * Request a single post from the API
+     * Handle when user clicks on map marker
      */
-    private onGetSinglePost = (id: string) => {
-        this.singlePostRequest = id;
-
-        store.dispatch(
-            fromActions.geographySinglePostFetch({
-                postId: this.singlePostRequest
-            })
-        );
+    private onMarkerClick = (id: string) => {
+        store.dispatch(fromActions.geographyPostsSetSelectedPostId(id));
+        store.dispatch(fromActions.geographyPostsSetModalActive(true));
     };
 
     /*
      * Create a single post
      */
-    private onCreatePost = () => {
-        this.singlePostRequest = '';
-
+    private onCreatePost = (entity: any) => {
         store.dispatch(
             fromActions.geographyPostCreate({
-                request: {
-                    title: 'Madrid',
-                    content: 'blah blah',
-                    lat: '40.41678',
-                    long: '-3.70379',
-                    image_url:
-                        'https://c2.staticflickr.com/2/1269/4670777817_d657cd9819_b.jpg'
-                }
-            })
-        );
-    };
-
-    /*
-     * Update a single post
-     */
-    private onUpdatePost = (id: string) => {
-        this.singlePostRequest = id;
-
-        store.dispatch(
-            fromActions.geographyPostUpdate({
-                postId: this.singlePostRequest,
-                request: {
-                    title: 'Madrid',
-                    content: 'blah blah',
-                    lat: '40.41678',
-                    long: '-3.70379',
-                    image_url:
-                        'https://c2.staticflickr.com/2/1269/4670777817_d657cd9819_b.jpg'
-                }
+                request: entity
             })
         );
     };
@@ -297,14 +190,26 @@ class PostsContainer extends Component<Props> {
     /*
      * Delete a single post
      */
-    private onDeletePost = (id: string) => {
-        this.singlePostRequest = id;
-
+    private onDeletePost = (postId: string) => {
         store.dispatch(
             fromActions.geographyPostDelete({
-                postId: this.singlePostRequest
+                postId
             })
         );
+    };
+
+    /*
+     * Add a city to the table and map
+     */
+    private onAddCity = (city: string) => {
+        this.onCreatePost(city);
+    };
+
+    /*
+     * Close single post view
+     */
+    private onCloseModal = () => {
+        store.dispatch(fromActions.geographyPostsSetModalActive(false));
     };
 }
 

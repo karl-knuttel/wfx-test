@@ -23,6 +23,10 @@ export const GEOGRAPHY_POST_DELETE = '@@wfx-test/geography-post/delete';
 export const GEOGRAPHY_POST_DELETED = '@@wfx-test/geography-post/deleted';
 export const GEOGRAPHY_POST_DELETE_FAILED =
     '@@wfx-test/geography-post/delete-failed';
+export const GEOGRAPHY_POST_SET_MODAL_ACTIVE_STATE =
+    '@@wfx-test/geography-posts/set-modal-active-state';
+export const GEOGRAPHY_POST_SET_SELECTED_POST_ID =
+    '@@wfx-test/geography-posts/set-selected-post-id';
 
 /**
  * Geography Posts
@@ -134,5 +138,21 @@ export function geographyPostDeleteFailed(payload: any) {
     return {
         payload,
         type: GEOGRAPHY_POST_DELETE_FAILED
+    };
+}
+
+/* Modal */
+export function geographyPostsSetModalActive(payload: any) {
+    return {
+        payload,
+        type: GEOGRAPHY_POST_SET_MODAL_ACTIVE_STATE
+    };
+}
+
+/* Selected Post Id */
+export function geographyPostsSetSelectedPostId(payload: any) {
+    return {
+        payload,
+        type: GEOGRAPHY_POST_SET_SELECTED_POST_ID
     };
 }

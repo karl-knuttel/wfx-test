@@ -1,3 +1,5 @@
+@import '../../shared/styles/shared';
+
 /* ===================================================
 Regions
 =================================================== */
@@ -6,12 +8,27 @@ Regions
 Header
 --------------------------------------------------- */
 .r-header {
+    height: 3rem;
+    background: $color--orange;
+    display: flex;
+    align-items: center;
+
+    .header__title-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        font-size: 18px;
+        color: $color--white;
+    }
 }
 
 /* ---------------------------------------------------
 Main
 --------------------------------------------------- */
 .r-main {
+    max-width: 1400px;
+    padding-top: 6rem;
+    margin: 0 auto;
 }
 
 /* ---------------------------------------------------

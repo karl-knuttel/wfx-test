@@ -1,0 +1,21 @@
+@import '../../../../shared/styles/shared';
+
+.c-locations-table {
+    width: 100%;
+    font-size: 16px;
+    color: $color--dark-blue;
+    background: $color--light-gray;
+    border: 1px solid $color--dark-blue;
+
+    th,
+    td {
+        text-align: left;
+        padding: 1rem 1.5rem;
+    }
+
+    th {
+        background: $color--dark-blue;
+        color: $color--white;
+        font-weight: 300;
+    }
+}
