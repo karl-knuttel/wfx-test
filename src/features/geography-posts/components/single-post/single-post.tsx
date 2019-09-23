@@ -223,6 +223,9 @@ class SinglePost extends Component<Props> {
                 request: this.state.entity
             })
         );
+        this.setState({
+            editActive: false
+        });
     };
 
     /*
