@@ -217,12 +217,14 @@ class SinglePost extends Component<Props> {
      * Update a single post
      */
     private onUpdatePost = () => {
-        store.dispatch(
-            fromActions.geographyPostUpdate({
-                postId: this.props.selectedPostId,
-                request: this.state.entity
-            })
-        );
+        if (this.state.entity !== this.props.entity) {
+            store.dispatch(
+                fromActions.geographyPostUpdate({
+                    postId: this.props.selectedPostId,
+                    request: this.state.entity
+                })
+            );
+        }
         this.setState({
             editActive: false
         });
