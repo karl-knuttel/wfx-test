@@ -153,7 +153,6 @@ function handleGeographyPostCreated(state: any, payload: any) {
         ...state,
         posts: {
             ...state.posts,
-            entities: payload.body,
             error: {},
             fetchStatus: FETCH_STATUS.CREATED
         }
@@ -187,7 +186,6 @@ function handleGeographyPostUpdated(state: any, payload: any) {
         ...state,
         posts: {
             ...state.posts,
-            entities: payload.body,
             error: {},
             fetchStatus: FETCH_STATUS.UPDATED
         }
@@ -221,7 +219,6 @@ function handleGeographyPostDeleted(state: any, payload: any) {
         ...state,
         posts: {
             ...state.posts,
-            entities: payload.body,
             error: {},
             fetchStatus: FETCH_STATUS.DELETED
         }
